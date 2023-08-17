@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<robot name="auto_car" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="M_PI" value="3.14159274"/>
+
+  <xacro:include filename="$(find auto_car)/urdf/base/base.urdf.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/suspension/globalpitch.urdf.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/suspension/globalyaw.urdf.xacro"/>
+  
+  <xacro:include filename="$(find auto_car)/urdf/wheel/wheel_rr.urdf.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/wheel/wheel_rf.urdf.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/wheel/wheel_lf.urdf.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/wheel/wheel_lr.urdf.xacro"/> 
+  
+  <xacro:include filename="$(find auto_car)/urdf/sensor/imu/imu.urdf.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/sensor/lidar/lidar.urdf.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/sensor/camera/camera.urdf.xacro"/>
+
+  <!-- =============== Link & Joint =============== -->
+  <!-- Base -->
+  <link name="base_footprint"/>
+  <xacro:base_v0 parent="base_footprint">
+	<origin xyz="0 0 0"/>
+  </xacro:base_v0>
+  
+  <!-- Lidar -->
+  <xacro:rplidar prefix="lidar" parent = "base_link">
+  	<origin xyz="0.19304 0.0002582 0.1355" rpy="0 0 0" />
+  </xacro:rplidar>
+  
+  <!-- IMU -->
+  <xacro:imu_v0 prefix="imu" parent="base_link">
+	<origin xyz="0.1975 0 0.023" rpy="0 0 0"  />
+  </xacro:imu_v0>
+
+  <!-- CAMERA -->
+ <xacro:camera_v0 prefix="camera" parent="pitch_steering_link">
+  <origin xyz="0.142 0.0010399 0.065" rpy="0 0 0" />
+ </xacro:camera_v0>
+
+  <!-- Suspension -->
+  <!-- YAW -->
+  <xacro:steering_yaw prefix="yaw" parent="base_link">
+	<origin xyz="0 0 0.064" rpy="0 0 0" />
+	<axis xyz="0 0 -1" />
+  </xacro:steering_yaw>
+  <!-- PITCH -->
+  <xacro:steering_pitch prefix="pitch" parent="yaw_steering_link">
+	<origin xyz="0 -0.00054389 0.16565"  rpy="0 0 0" />
+	<axis xyz="0 1 0" />
+  </xacro:steering_pitch>
+
+
+  <!-- Wheel -->
+  <!-- Front Right Wheel -->
+  <xacro:wheel_rr_v0 prefix="rr" parent="base_link">
+	<origin xyz="-0.17433 -0.1915 -0.0202" rpy="0 0 0" />
+	 <axis xyz="0 -1 0" />
+  </xacro:wheel_rr_v0>
+  <!--  Front Left Wheel -->
+  <xacro:wheel_lr_v0 prefix="rl" parent="base_link">
+	<origin xyz="-0.17433 0.1915 -0.0202" rpy="0 0 0" />
+	<axis xyz="0 1 0" />
+  </xacro:wheel_lr_v0>
+  <!-- Rear Right Wheel -->
+  <xacro:wheel_rf_v0 prefix="fr" parent="base_link">
+	<origin xyz="0.18033 -0.1915 -0.0202" rpy="0 0 0" />
+	<axis xyz="0 -1 0"/>
+  </xacro:wheel_rf_v0>
+  <!--  Rear Left Wheel -->
+  <xacro:wheel_lf_v0 prefix="fl" parent="base_link">
+	<origin xyz="0.18033 0.1915 -0.0202" rpy="0 0 0"/>
+	<axis xyz="0 1 0"/>
+  </xacro:wheel_lf_v0>
+
+  <!-- ===============  Wheel Transmission =============== -->
+  <xacro:wheel_trans_v0 prefix="fr"/>
+  <xacro:wheel_trans_v0 prefix="fl"/>
+  <xacro:wheel_trans_v0 prefix="rr"/>
+  <xacro:wheel_trans_v0 prefix="rl"/>
+  <!-- ===============  Steering Transmission =============== -->
+  <xacro:steering_trans_v0 prefix="yaw"/>
+  <xacro:steering_trans_v0 prefix="pitch"/>
+  <!-- =============== Gazebo =============== -->
+ 
+  <!-- Drive controller -->
+<gazebo>
+
+<plugin name="mecanum_controller" filename="libgazebo_ros_planar_move.so">
+ <alwaysOn>true</alwaysOn>
+    <updateRate>100.0</updateRate>
+    <robotNamespace>/</robotNamespace>
+<commandTopic>base_vel</commandTopic>
+<odometryTopic>odom</odometryTopic>
+<odometryFrame>odom</odometryFrame>
+<leftFrontJoint>fl_wheel_joint</leftFrontJoint>
+<rightFrontJoint>fr_wheel_joint</rightFrontJoint>
+<leftRearJoint>rl_wheel_joint</leftRearJoint>
+<rightRearJoint>rr_wheel_joint</rightRearJoint>
+<wheelSeparation>0.383</wheelSeparation>
+<wheelDiameter>0.13</wheelDiameter>
+<odometryRate>20.0</odometryRate>
+<torque>2</torque>
+<robotBaseFrame>base_footprint</robotBaseFrame>
+<publishOdomTF>true</publishOdomTF>
+<broadcastTF>0</broadcastTF>
+</plugin>
+</gazebo>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>/auto_car</robotNamespace>
+    <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+  <!-- Base -->
+  <xacro:base_gazebo_v0/>
+
+  <!-- IMU -->
+  <xacro:imu_gazebo_v0 prefix = "imu"/>
+  
+  <!-- LIDAR -->
+  <xacro:lidar_gazebo_v0 prefix ="lidar"/>
+  
+  <!-- CAMERA -->
+   <xacro:camera_gazebo_v0 prefix ="camera"/>
+
+  <!-- Wheel -->
+  <xacro:wheel_gazebo_v0 prefix="fr"/>
+  <xacro:wheel_gazebo_v0 prefix="fl"/>
+  <xacro:wheel_gazebo_v0 prefix="rr"/>
+  <xacro:wheel_gazebo_v0 prefix="rl"/>
+
+  <!-- Gombal -->
+  <xacro:steering_gazebo_v0 prefix="yaw"/>
+  <xacro:steering_gazebo_v0 prefix="pitch"/>
+
+
+</robot>

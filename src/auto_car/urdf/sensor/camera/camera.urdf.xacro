@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="camera">
+
+<xacro:include filename="$(find auto_car)/urdf/sensor/camera/camera.gazebo.xacro"/>
+
+    <xacro:macro name="camera_v0" params="prefix:=camera parent *joint_origin">
+        <!-- Create imu reference frame -->
+	<joint name="${prefix}_joint" type="fixed">
+	  <xacro:insert_block name="joint_origin"/>
+	  <parent link="${parent}"/>
+	  <child link="${prefix}_link"/>
+     	  <axis xyz="0 0 0" />
+	</joint>
+       
+        <link name="${prefix}_link">
+            <inertial>
+      <origin
+        xyz="-0.033363 1.8912E-05 -7.787E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.1358" />
+      <inertia
+        ixx="1.7141E-05"
+        ixy="4.9536E-08"
+        ixz="-4.6015E-07"
+        iyy="5.9569E-05"
+        iyz="-8.8006E-08"
+        izz="5.9444E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/cam_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/cam_link.STL" />
+      </geometry>
+    </collision>
+        </link>
+        
+
+    </xacro:macro>
+</robot>

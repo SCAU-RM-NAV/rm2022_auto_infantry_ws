@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find auto_car)/urdf/base/base.gazebo.xacro"/>
+  
+  <xacro:macro name="base_v0" params="parent *joint_origin">
+	<joint name="base_link_joint" type="fixed">
+	  <xacro:insert_block name="joint_origin"/>
+	  <parent link="${parent}"/>
+	  <child link="base_link"/>
+	</joint>
+
+	<link name="base_link">
+	  <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+	  <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+	  <inertial>
+       <origin
+        xyz="-0.0076937 0.00027882 0.034364"
+        rpy="0 0 0" />
+      <mass
+        value="10.6326" />
+      <inertia
+        ixx="0.0046832"
+        ixy="1.2407E-07"
+        ixz="-9.8798E-06"
+        iyy="0.0044338"
+        iyz="5.1418E-08"
+        izz="0.0071439" />
+    </inertial>
+	</link>
+  </xacro:macro>
+  
+</robot>

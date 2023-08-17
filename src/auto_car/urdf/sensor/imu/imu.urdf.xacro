@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="imu">
+
+	<xacro:include filename="$(find auto_car)/urdf/sensor/imu/imu.gazebo.xacro"/>
+
+    <xacro:macro name="imu_v0" params="prefix:=imu parent *joint_origin">
+        <!-- Create imu reference frame -->
+	<joint name="${prefix}_joint" type="fixed">
+	  <xacro:insert_block name="joint_origin"/>
+	  <parent link="${parent}"/>
+	  <child link="${prefix}_link"/>
+     	  <axis xyz="0 0 0" />
+	</joint>
+
+        <link name="${prefix}_link">
+            <inertial>
+      <origin
+        xyz="-0.00049093 8.335E-08 0.012123"
+        rpy="0 0 0" />
+      <mass
+        value="0.015203" />
+      <inertia
+        ixx="3.5859E-06"
+        ixy="1.0704E-13"
+        ixz="-1.6004E-09"
+        iyy="3.4532E-06"
+        iyz="5.2624E-13"
+        izz="5.6462E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/imu_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/imu_link.STL" />
+      </geometry>
+    </collision>
+        </link>
+	
+ </xacro:macro>
+</robot>

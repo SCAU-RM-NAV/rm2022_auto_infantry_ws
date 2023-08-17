@@ -1,0 +1,20 @@
+auto_car:
+
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 100
+  
+  # Position Controllers ---------------------------------------
+  yaw_steering_position_controller:
+    joint: yaw_steering_joint
+    type: position_controllers/JointPositionController
+    #pid: {p: 10.0, i: 0.0, d: 0.5}
+  pitch_steering_position_controller:
+    joint: pitch_steering_joint
+    type: position_controllers/JointPositionController
+    #pid: {p: 10.0, i: 0.0, d: 0.5}
+
+
+
+  

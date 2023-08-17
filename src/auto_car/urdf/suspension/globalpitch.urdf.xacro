@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find auto_car)/urdf/suspension/suspension.transmission.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/suspension/suspension.gazebo.xacro"/>
+  
+  <xacro:macro name="steering_pitch" params="prefix parent *joint_origin *joint_axis">
+	<joint name="${prefix}_steering_joint" type="revolute">
+	  <xacro:insert_block name="joint_origin"/>
+	  <parent link="${parent}"/>
+	  <child link="${prefix}_steering_link"/>
+          <limit effort="500" velocity="6.28"  lower="-1.57" upper="1.57" />
+          <xacro:insert_block name="joint_axis"/>
+	</joint>
+
+	<link name="${prefix}_steering_link">
+	  <inertial>
+      <origin
+        xyz="-0.011329503407518 -0.00566825850864777 0.0257601607814607"
+        rpy="0 0 0" />
+      <mass
+        value="1.2356" />
+      <inertia
+        ixx="0.0008638"
+        ixy="1.9361E-06"
+        ixz="1.4909E-05"
+        iyy="0.0010199"
+        iyz="-1.2191E-06"
+        izz="0.0014462" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/pitch_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/pitch_link.STL" />
+      </geometry>
+    </collision>
+	</link>
+  </xacro:macro>
+  
+</robot>

@@ -1,0 +1,31 @@
+
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="model" default="$(find auto_car)/robots/auto_car.xacro"/>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(arg model)'" />
+  
+   <include file="$(find robot_base)/launch/robot_base.launch"/>
+   
+   <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+   
+   <include file="$(find serial_imu)/launch/imu_0x91_msg.launch"/>
+  
+     <node pkg="auto_control" type="joint_state_update_node" name="joint_state_update_node" output="screen">
+  </node>
+    <!-- 运行robot_state_publisher节点，发布tf  -->
+  <node name = "robot_state_publisher" pkg = "robot_state_publisher" type = "robot_state_publisher"  output="screen" ns="/auto_car">
+      <param name="publish_frequency" type="double" value="50.0" />
+  </node>
+  
+
+  <!--<node
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find auto_car)/config/auto_car.rviz" />-->
+
+
+</launch>

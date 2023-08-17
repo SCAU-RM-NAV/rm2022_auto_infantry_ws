@@ -1,0 +1,41 @@
+
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="model" default="$(find auto_car)/robots/auto_car.xacro"/>
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="x_pos" default="0"/>
+  <arg name="y_pos" default="0"/>
+  <arg name="z_pos" default="0.12"/>
+  
+<!--运行gazebo仿真环境-->
+<include file="$(find gazebo_ros)/launch/empty_world.launch">
+          <arg name="debug" value="$(arg debug)" />
+          <arg name="gui" value="$(arg gui)" />
+          <arg name="paused" value="$(arg paused)"/>
+          <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+          <arg name="headless" value="$(arg headless)"/>
+          <arg name="world_name" value="$(find auto_car)/auto_world.world"/>
+          
+             
+      </include>
+
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(arg model)'" />
+  
+    <!-- 运行robot_state_publisher节点，发布tf  -->
+  <node name = "robot_state_publisher" pkg = "robot_state_publisher" type = "robot_state_publisher"  output="screen" ns="/auto_car">
+      <param name="publish_frequency" type="double" value="50.0" />
+  </node>
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+  		args="-urdf -model auto_car -param robot_description -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos)"/>
+
+
+</launch>

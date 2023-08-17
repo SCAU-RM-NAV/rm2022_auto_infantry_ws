@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+
+<launch>
+
+<node respawn="true" pkg="joy"
+        type="joy_node" name="turtle_joy" >
+    <param name="dev" type="string" value="/dev/input/js0" />
+ </node>
+ 
+  <node pkg="auto_control" type="joy_ctrl" name="joy_ctrl" output="screen">
+  </node>
+
+
+
+</launch>

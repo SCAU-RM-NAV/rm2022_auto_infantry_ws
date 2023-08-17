@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find auto_car)/urdf/suspension/suspension.transmission.xacro"/>
+  <xacro:include filename="$(find auto_car)/urdf/suspension/suspension.gazebo.xacro"/>
+  
+  <xacro:macro name="steering_yaw" params="prefix parent *joint_origin *joint_axis">
+	<joint name="${prefix}_steering_joint" type="continuous">
+	  <xacro:insert_block name="joint_origin"/>
+	  <parent link="${parent}"/>
+	  <child link="${prefix}_steering_link"/>
+          <xacro:insert_block name="joint_axis"/>
+	</joint>
+
+	<link name="${prefix}_steering_link">
+	 <inertial>
+      <origin
+        xyz="0.0016177 0.00088105 0.035665"
+        rpy="0 0 0" />
+      <mass
+        value="0.90257" />
+      <inertia
+        ixx="0.0015118"
+        ixy="-5.1443E-05"
+        ixz="-4.1322E-06"
+        iyy="0.0013289"
+        iyz="-7.355E-06"
+        izz="0.0024712" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/yaw_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/yaw_link.STL" />
+      </geometry>
+    </collision>
+	</link>
+  </xacro:macro>
+  
+</robot>

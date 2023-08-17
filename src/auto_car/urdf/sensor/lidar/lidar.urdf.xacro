@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="laser">
+
+<xacro:include filename="$(find auto_car)/urdf/sensor/lidar/lidar.gazebo.xacro"/>
+
+        <!-- Create laser reference frame -->
+    <xacro:macro name="rplidar" params="prefix:=lidar parent *joint_origin">
+        <!-- Create imu reference frame -->
+	<joint name="${prefix}_joint" type="fixed">
+	  <xacro:insert_block name="joint_origin"/>
+	  <parent link="${parent}"/>
+	  <child link="${prefix}_link"/>
+     	  <axis xyz="0 0 0" />
+	</joint>
+        <link name="${prefix}_link">
+            <inertial>
+      <origin
+        xyz="-0.00046525 -0.00042291 -0.021518"
+        rpy="0 0 0" />
+      <mass
+        value="0.16704" />
+      <inertia
+        ixx="6.2214E-05"
+        ixy="1.0964E-06"
+        ixz="1.7756E-08"
+        iyy="6.1763E-05"
+        iyz="1.4397E-08"
+        izz="0.00011279" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/lidar_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://auto_car/meshes/lidar_link.STL" />
+      </geometry>
+    </collision>
+        </link>
+        
+
+    </xacro:macro>
+</robot>
